@@ -43,46 +43,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
-    @Composable
-    fun RequestForm() {
-        var inputRequest by remember { mutableStateOf("") }
-        var responseText by remember { mutableStateOf("") }
-        val coroutineScope = rememberCoroutineScope()
-
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            OutlinedTextField(
-                value = inputRequest,
-                onValueChange = { inputRequest = it },
-                label = { Text("Request") }
-            )
-
-            Button(onClick = {
-                coroutineScope.launch {
-                    getGeminiResponse(inputRequest) { response ->
-                        responseText = response  // Actualiza el estado de la UI
-                    }
-                }
-            }) {
-                Text(text = "Submit request")
-            }
-
-            Text(text = "Response: $responseText")
-        }
-    }
-
-    private suspend fun getGeminiResponse(request: String, onResponse: (String) -> Unit) {
-        val generativeModel = GenerativeModel(
-            modelName = "gemini-1.5-flash",
-            apiKey = apiKey
-        )
-
-        val response = generativeModel.generateContent(request)
-        response.text?.let { onResponse(it) } // Devolver la respuesta usando el callback
-    }
-
 }
