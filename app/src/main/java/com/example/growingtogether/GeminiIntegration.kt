@@ -38,8 +38,12 @@ fun RequestForm() {
 
         Button(onClick = {
             coroutineScope.launch {
-                getGeminiResponse(inputRequest) { response ->
-                    responseText = response  // Actualiza el estado de la UI
+                if (inputRequest.isNotBlank()) {
+                    getGeminiResponse(inputRequest) { response ->
+                        responseText = response
+                    }
+                } else {
+                    responseText = "La peticion no debe estar vacia"
                 }
             }
         }) {

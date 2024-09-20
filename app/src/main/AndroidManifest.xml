@@ -13,6 +13,11 @@
         android:theme="@style/Theme.GrowingTogether"
         tools:targetApi="31">
         <activity
+            android:name=".RegisterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_register"
+            android:theme="@style/Theme.GrowingTogether" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
