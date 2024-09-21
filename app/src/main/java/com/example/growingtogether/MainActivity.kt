@@ -158,7 +158,9 @@ fun LoginForm() {
                     fontFamily = FontFamily.Serif // Tipo de fuente (puedes cambiarla)
                 ),
                 onClick = {
-                    // Go to the register activity
+                    // Go to forgot password activity
+                    val intent = Intent(context, ForgotPasswordActivity::class.java)
+                    context.startActivity(intent)
                 }
             )
         }

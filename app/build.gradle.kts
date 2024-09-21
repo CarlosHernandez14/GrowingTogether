@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,6 +60,16 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+
+    // ORM
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
+    // Live data
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.1")
 
     // Coroutines implementations
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")

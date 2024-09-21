@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GrowingTogether</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
 </resources>
