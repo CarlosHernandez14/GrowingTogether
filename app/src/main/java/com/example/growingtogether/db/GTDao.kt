@@ -14,6 +14,9 @@ interface GTDao {
     @Query("SELECT * FROM Bebe")
     fun getAllBabies(): LiveData<List<Bebe>>
 
+    @Query("SELECT * FROM Bebe WHERE idUsuario = :idUsuario")
+    fun getBabiesFromUser(idUsuario: Int) : LiveData<List<Bebe>>
+
     @Query("SELECT * FROM Bebe WHERE id = :idBebe")
     fun getBabyById(idBebe: Int): LiveData<Bebe>
 
