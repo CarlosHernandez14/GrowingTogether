@@ -61,6 +61,7 @@ dependencies {
 
     implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
     implementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
 

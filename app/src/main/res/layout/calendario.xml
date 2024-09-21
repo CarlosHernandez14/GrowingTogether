@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_bitacora"
+    android:padding="16dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logobebe"
+        tools:layout_editor_absoluteX="75dp"
+        tools:layout_editor_absoluteY="25dp" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gabriela_regular"
+        android:text="Sebastian"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="27dp" />
+
+    <Button
+        android:layout_width="158dp"
+        android:layout_height="43dp"
+        android:background="#C472C6"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:text="Dieta"
+        android:fontFamily="@font/gabriela_regular"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="493dp" />
+
+    <Button
+        android:layout_width="158dp"
+        android:layout_height="43dp"
+        android:background="#C472C6"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:text="Bitacora"
+        android:fontFamily="@font/gabriela_regular"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="214dp"
+        tools:layout_editor_absoluteY="492dp" />
+
+    <Button
+        android:layout_width="336dp"
+        android:layout_height="46dp"
+        android:background="#C472C6"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:text="Ver especialistas"
+        android:fontFamily="@font/gabriela_regular"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:border
+        tools:layout_editor_absoluteX="25dp"
+        tools:layout_editor_absoluteY="586dp" />
+
+    <CalendarView
+        android:id="@+id/calendarView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="96dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
