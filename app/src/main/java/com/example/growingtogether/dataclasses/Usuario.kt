@@ -2,9 +2,10 @@ package com.example.growingtogether.dataclasses
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.Date
 
-@Entity
+@Entity(tableName = "Usuario")
 data class Usuario(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
@@ -12,4 +13,4 @@ data class Usuario(
     var correo: String,
     var contrasena: String,
     var createdAt: Date
-)
+) : Serializable

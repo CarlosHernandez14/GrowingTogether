@@ -2,6 +2,7 @@ package com.example.growingtogether
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -25,12 +26,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -38,7 +41,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.growingtogether.dataclasses.Usuario
 import com.example.growingtogether.ui.theme.GrowingTogetherTheme
+import kotlinx.coroutines.launch
+import java.util.Date
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,6 +87,13 @@ fun RegisterView() {
 @Composable
 fun RegisterForm() {
 
+    val gtDao = MainApplication.gtDatabase.getGTDao();
+    val context = LocalContext.current;
+
+    var name by remember {
+        mutableStateOf("")
+    }
+
     var email by remember {
         mutableStateOf("")
     }
@@ -93,6 +106,8 @@ fun RegisterForm() {
         mutableStateOf("")
     }
 
+    val coroutineScope = rememberCoroutineScope();
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -104,6 +119,7 @@ fun RegisterForm() {
         //TITTLE
         Text(text = "Crear cuenta", fontSize = 35.sp, fontFamily = FontFamily.Serif, color = Color(0xFFC472C6))
 
+        InputCard(cardName = "Nombre", inputValue = name, onValueChange = { name = it })
         // Email input
         InputCard(cardName = "Correo", email, onValueChange = {email = it})
 
@@ -113,7 +129,30 @@ fun RegisterForm() {
 
         // BUtton to access
         Button(
-            onClick = { /* Acción del botón */ },
+            onClick = {
+                if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && passwordRepeat.isNotEmpty()) {
+                    val usuario = Usuario(
+                        nombre = name,
+                        correo = email,
+                        contrasena = password,
+                        createdAt = Date()
+                    );
+
+                    // Create the user
+                    coroutineScope.launch {
+                        coroutineScope.launch {
+                            gtDao.insertUser(usuario)
+                            Toast.makeText(context, "Bienvenido a Growing Together", Toast.LENGTH_LONG).show()
+                            // We get into anther activity
+                            val intent = Intent(context, MainActivity::class.java);
+                            context.startActivity(intent);
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Por favor llena todos los campos", Toast.LENGTH_LONG).show()
+                }
+
+            },
             modifier = Modifier
                 .shadow(8.dp, RoundedCornerShape(5.dp)) // Agregar sombra
                 .height(45.dp), // Altura del botón

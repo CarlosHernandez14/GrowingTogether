@@ -16,6 +16,6 @@ class MainApplication : Application() {
             applicationContext,
             GTDatabase::class.java,
             GTDatabase.NAME
-        ).build()
+        ).fallbackToDestructiveMigration().build()
     }
 }

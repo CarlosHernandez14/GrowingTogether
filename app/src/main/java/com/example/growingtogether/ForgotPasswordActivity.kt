@@ -66,6 +66,7 @@ fun BebeForm(gtDao: GTDao) {
     var peso by remember { mutableStateOf("") }
     var genero by remember { mutableStateOf('M') }
     var idBitacora by remember { mutableStateOf("") }
+    var idUsuario by remember { mutableStateOf("") }
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -109,6 +110,13 @@ fun BebeForm(gtDao: GTDao) {
 
         Spacer(modifier = Modifier.height(8.dp))
 
+        OutlinedTextField(
+            value = idBitacora,
+            onValueChange = { idBitacora = it },
+            label = { Text("ID Usuario") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
         // Género selector (M o F)
         Row {
             Text(text = "Género: ")
@@ -131,6 +139,7 @@ fun BebeForm(gtDao: GTDao) {
             if (nombre.isNotEmpty() && peso.isNotEmpty() && idBitacora.isNotEmpty()) {
                 val bebe = Bebe(
                     nombre = nombre,
+                    idUsuario = idUsuario.toInt(),
                     fechanacimiento = fechaNacimiento,
                     peso = peso.toDouble(),
                     genero = genero,

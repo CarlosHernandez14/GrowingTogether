@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
 
-@Entity
-data class BItacora(
+@Entity(tableName = "Bitacora")
+data class Bitacora(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
     var id_bebe: Int,

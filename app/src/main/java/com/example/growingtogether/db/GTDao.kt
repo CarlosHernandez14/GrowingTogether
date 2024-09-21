@@ -2,8 +2,8 @@ package com.example.growingtogether.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.growingtogether.dataclasses.BItacora
 import com.example.growingtogether.dataclasses.Bebe
+import com.example.growingtogether.dataclasses.Bitacora
 import com.example.growingtogether.dataclasses.Registros_Bitacora
 import com.example.growingtogether.dataclasses.Usuario
 
@@ -28,19 +28,19 @@ interface GTDao {
 
     // Bitacora CRUD operations
     @Query("SELECT * FROM BItacora")
-    fun getAllBitacoras(): LiveData<List<BItacora>>
+    fun getAllBitacoras(): LiveData<List<Bitacora>>
 
     @Query("SELECT * FROM BItacora WHERE id = :idBitacora")
-    fun getBitacoraById(idBitacora: Int): LiveData<BItacora>
+    fun getBitacoraById(idBitacora: Int): LiveData<Bitacora>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBitacora(bitacora: BItacora)
+    suspend fun insertBitacora(bitacora: Bitacora)
 
     @Update
-    suspend fun updateBitacora(bitacora: BItacora)
+    suspend fun updateBitacora(bitacora: Bitacora)
 
     @Delete
-    suspend fun deleteBitacora(bitacora: BItacora)
+    suspend fun deleteBitacora(bitacora: Bitacora)
 
     // Registros_Bitacora CRUD operations
     @Query("SELECT * FROM Registros_Bitacora WHERE id_bitacora = :idBitacora")

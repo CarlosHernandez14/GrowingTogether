@@ -15,10 +15,11 @@ class GTViewModel : ViewModel() {
 
     val babiesList : LiveData<List<Bebe>> = gtDao.getAllBabies();
 
-    fun addBabie(nombre: String, fechaNacimiento: Date, peso: Double, genero: Char, idBitacora: Int) {
+    fun addBabie(nombre: String,idUsuario: Int,  fechaNacimiento: Date, peso: Double, genero: Char, idBitacora: Int) {
         viewModelScope.launch {
             gtDao.insertBaby(Bebe(
                 nombre = nombre,
+                idUsuario = idUsuario,
                 fechanacimiento = fechaNacimiento,
                 peso = peso,
                 genero = genero,

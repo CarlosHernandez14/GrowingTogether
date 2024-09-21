@@ -2,6 +2,7 @@ package com.example.growingtogether
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -32,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -51,6 +53,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import com.example.growingtogether.dataclasses.Bebe
+import com.example.growingtogether.dataclasses.Usuario
 import com.example.growingtogether.ui.theme.GrowingTogetherTheme
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.launch
@@ -101,6 +106,10 @@ fun LoginView() {
 @Composable
 fun LoginForm() {
 
+    val gtDao = MainApplication.gtDatabase.getGTDao();
+    val coroutineScope = rememberCoroutineScope();
+
+
     val context = LocalContext.current;
     var email by remember {
         mutableStateOf("")
@@ -109,6 +118,12 @@ fun LoginForm() {
     var password by remember {
         mutableStateOf("")
     }
+
+    // We get all users
+
+    // Observa el LiveData de los usuarios y lo convierte a un estado composable
+    val users: LiveData<List<Usuario>> = gtDao.getAllUsers()
+    val usersList by users.observeAsState(initial = emptyList())
 
     Column (
         modifier = Modifier
@@ -167,7 +182,27 @@ fun LoginForm() {
 
         // BUtton to access
         Button(
-            onClick = { /* Acción del botón */ },
+            onClick = {
+                // Check the data coincidence to find the user
+
+                // Check the data coincidence to find the user
+                val matchedUser = usersList.find { user ->
+                    user.correo == email && user.contrasena == password
+                }
+
+                if (matchedUser != null) {
+                    // Si se encuentra el usuario, hacer lo que sea necesario (por ejemplo, navegar a otra pantalla)
+                    val intent = Intent(context, HomeActivity::class.java);
+                    intent.putExtra("user", matchedUser);
+                    context.startActivity(intent);
+                    Toast.makeText(context, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+                    // Aquí puedes redirigir a otra actividad si es necesario
+                } else {
+                    // Si no se encuentra el usuario, mostrar un mensaje de error
+                    Toast.makeText(context, "Correo o contraseña incorrectos", Toast.LENGTH_LONG).show()
+                }
+
+            },
             modifier = Modifier
                 .shadow(8.dp, RoundedCornerShape(5.dp)) // Agregar sombra
                 .height(45.dp), // Altura del botón
