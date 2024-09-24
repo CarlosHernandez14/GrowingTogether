@@ -1,12 +1,19 @@
 package com.example.growingtogether
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +32,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -55,7 +63,9 @@ import com.example.growingtogether.ui.theme.GrowingTogetherTheme
 import com.example.growingtogether.ui.theme.gabrielaFontFamily
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
+import com.example.growingtogether.logbook.LogBookActivity
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -312,16 +322,33 @@ fun HommeView(user: Usuario, gtDao: GTDao) {
 
 @Composable
 fun BabieCard(babie: Bebe, gtDao: GTDao) {
-    
-    val coroutineScope = rememberCoroutineScope();
 
+    val coroutineScope = rememberCoroutineScope();
+    val localContext = LocalContext.current;
     val showConfirmation = remember {
         mutableStateOf(false)
     }
+
+    // Controlamos la animación
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.95f else 1f,
+        animationSpec = spring(stiffness = Spring.StiffnessLow), label = ""
+    )
+
     Surface(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .scale(scale)
+            .clickable(interactionSource = interactionSource, indication = rememberRipple()) {
+                // Navigate to another acitvity
+                val intent = Intent(localContext, LogBookActivity::class.java);
+                intent.putExtra("baby", babie);
+                localContext.startActivity(intent);
+            },
         shape = MaterialTheme.shapes.medium,
         color = Color(0xFFF0F8FF),
         shadowElevation = 4.dp

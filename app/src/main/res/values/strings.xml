@@ -3,4 +3,6 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_forgot_password">ForgotPasswordActivity</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_log_book">LogBookActivity</string>
+    <string name="title_activity_symptoms">Symptoms</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.growingtogether.dataclasses
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.Date
 
 @Entity(tableName = "Bebe")
@@ -14,4 +15,4 @@ data class Bebe(
     var genero: Char,
     var idBitacora: Int,
     var createdAt : Date
-)
+) : Serializable

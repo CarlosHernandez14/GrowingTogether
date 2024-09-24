@@ -14,6 +14,16 @@
         android:theme="@style/Theme.GrowingTogether"
         tools:targetApi="31">
         <activity
+            android:name=".logbook.SymptomsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_symptoms"
+            android:theme="@style/Theme.GrowingTogether" />
+        <activity
+            android:name=".logbook.LogBookActivity"
+            android:exported="false"
+            android:label="@string/title_activity_log_book"
+            android:theme="@style/Theme.GrowingTogether" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
