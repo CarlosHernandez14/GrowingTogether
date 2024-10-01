@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.example.growingtogether.MainApplication
 import com.example.growingtogether.R
 import com.example.growingtogether.dataclasses.Bebe
+import com.example.growingtogether.dataclasses.Usuario
 import com.example.growingtogether.db.GTDao
 import com.example.growingtogether.logbook.components.MoodBarChart
 import com.example.growingtogether.logbook.ui.theme.GrowingTogetherTheme
@@ -65,8 +66,9 @@ class LogBookActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val baby = intent.getSerializableExtra("baby") as? Bebe;
-                    if (baby != null){
-                        LogBookView(baby = baby, gtDao);
+                    val user = intent.getSerializableExtra("user") as? Usuario
+                    if (baby != null && user != null){
+                        LogBookView(baby = baby, user, gtDao);
                     }
                 }
             }
@@ -75,7 +77,7 @@ class LogBookActivity : ComponentActivity() {
 }
 
 @Composable
-fun LogBookView(baby: Bebe, gtDao: GTDao) {
+fun LogBookView(baby: Bebe, user: Usuario, gtDao: GTDao) {
 
     val barChartColor: Color = Color(0xFFB0D0E7);
     val context = LocalContext.current;
@@ -199,6 +201,7 @@ fun LogBookView(baby: Bebe, gtDao: GTDao) {
                     // Open the symptoms activity
                     val intent = Intent(context, SymptomsActivity::class.java)
                     intent.putExtra("baby", baby);
+                    intent.putExtra("user", user);
                     context.startActivity(intent);
                 },
                 modifier = Modifier.size(60.dp),  // Evitar la forma ovalada

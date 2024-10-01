@@ -192,7 +192,7 @@ fun HommeView(user: Usuario, gtDao: GTDao) {
             // Lazy column with the babies list
             LazyColumn {
                 items(babiesList) {bebe ->
-                    BabieCard(babie = bebe, gtDao)
+                    BabieCard(babie = bebe, gtDao, user)
                 }
             }
         }
@@ -321,7 +321,7 @@ fun HommeView(user: Usuario, gtDao: GTDao) {
 }
 
 @Composable
-fun BabieCard(babie: Bebe, gtDao: GTDao) {
+fun BabieCard(babie: Bebe, gtDao: GTDao, user: Usuario) {
 
     val coroutineScope = rememberCoroutineScope();
     val localContext = LocalContext.current;
@@ -347,6 +347,7 @@ fun BabieCard(babie: Bebe, gtDao: GTDao) {
                 // Navigate to another acitvity
                 val intent = Intent(localContext, LogBookActivity::class.java);
                 intent.putExtra("baby", babie);
+                intent.putExtra("user", user);
                 localContext.startActivity(intent);
             },
         shape = MaterialTheme.shapes.medium,

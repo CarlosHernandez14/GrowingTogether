@@ -34,15 +34,10 @@ import com.example.growingtogether.ui.theme.gabrielaFontFamily
 @Composable
 fun MoodSelection(
     selectedMood: Mood?,   // Parámetro para recibir el estado de ánimo seleccionado
-    onMoodSelected: (Mood) -> Unit
+    onMoodSelected: (Mood) -> Unit,
+    moods: List<Mood>
 ) {
     // Lista de estados de ánimo y sus íconos
-    val moods = listOf(
-        Mood("Satisfacción", R.drawable.ic_satisfaccion), // Reemplaza con tus imágenes
-        Mood("Malestar", R.drawable.ic_malestar),
-        Mood("Tristeza", R.drawable.ic_tristeza),
-        Mood("Interés", R.drawable.ic_interes)
-    )
 
     Column(
         modifier = Modifier

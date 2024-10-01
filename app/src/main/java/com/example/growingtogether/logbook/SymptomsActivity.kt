@@ -23,9 +23,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.AlertDialog
@@ -46,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -58,6 +62,7 @@ import com.example.growingtogether.InputCard
 import com.example.growingtogether.MainApplication
 import com.example.growingtogether.R
 import com.example.growingtogether.dataclasses.Bebe
+import com.example.growingtogether.dataclasses.Usuario
 import com.example.growingtogether.db.GTDao
 import com.example.growingtogether.logbook.components.Mood
 import com.example.growingtogether.logbook.components.MoodSelection
@@ -78,8 +83,9 @@ class SymptomsActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val baby = intent.getSerializableExtra("baby") as? Bebe;
-                    if(baby != null) {
-                        SymptomsView(baby = baby, gtDao = gtDao);
+                    val user = intent.getSerializableExtra("user") as? Usuario
+                    if(baby != null && user != null) {
+                        SymptomsView(baby = baby, gtDao = gtDao, user = user);
                     }
                 }
             }
@@ -88,11 +94,11 @@ class SymptomsActivity : ComponentActivity() {
 }
 
 @Composable
-fun SymptomsView(baby: Bebe, gtDao: GTDao) {
-    val context = LocalContext.current;
+fun SymptomsView(baby: Bebe, user: Usuario, gtDao: GTDao) {
+    val context = LocalContext.current
     // Variable para almacenar el estado de ánimo seleccionado
     var selectedMood by remember { mutableStateOf<Mood?>(null) }
-
+    var selectedMoodParent by remember { mutableStateOf<Mood?>(null) }
 
     Column (
         modifier = Modifier
@@ -110,15 +116,19 @@ fun SymptomsView(baby: Bebe, gtDao: GTDao) {
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        Column (
+        // Aquí usamos weight para darle prioridad al contenido y dejar espacio para el botón
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
+                .weight(1f) // El contenido principal ocupa el espacio disponible
+                .padding(20.dp)
+                .verticalScroll(rememberScrollState()), // Hacemos el contenido scrolleable
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
 
-            Row (
+            // Contenido principal
+
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(5.dp),
@@ -139,45 +149,101 @@ fun SymptomsView(baby: Bebe, gtDao: GTDao) {
 
                 Spacer(modifier = Modifier.width(15.dp))
 
-                Text(text = baby.nombre, fontFamily = gabrielaFontFamily, fontSize = 30.sp, color = Color.White, fontWeight = FontWeight.Bold)
+                Text(
+                    text = baby.nombre,
+                    fontFamily = gabrielaFontFamily,
+                    fontSize = 30.sp,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold
+                )
             }
 
-            // Boxes
             Spacer(modifier = Modifier.height(10.dp))
             AddSymptomsBox()
 
-            // Muestra la selección de ánimo
             Spacer(modifier = Modifier.height(10.dp))
+
+            val moods = listOf(
+                Mood("Satisfacción", R.drawable.ic_satisfaccion),
+                Mood("Malestar", R.drawable.ic_malestar),
+                Mood("Tristeza", R.drawable.ic_tristeza),
+                Mood("Interés", R.drawable.ic_interes)
+            )
 
             MoodSelection(
                 selectedMood = selectedMood,
                 onMoodSelected = { mood ->
                     selectedMood = mood
-                    // Aquí puedes guardar el estado de ánimo en la base de datos o manejarlo como sea necesario
-                }
+                },
+                moods = moods
             )
 
-            Row (
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.Bottom
-            ) {
-                Button(
-                    onClick = {
-                        // De momento solo regresa al activity anterior
-                        (context as? Activity)?.finish()
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFC472C6), // Color de fondo
-                        contentColor = Color.White // Color del contenido (icono)
-                    )
-                ) {
-                    Text("Agregar")
-                }
+            Spacer(modifier = Modifier.height(10.dp))
 
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Ánimo del padre",
+                    modifier = Modifier.size(70.dp),
+                    tint = Color.White
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(
+                    text = user.nombre,
+                    fontFamily = gabrielaFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+                    color = Color.White
+                )
             }
+
+            val moodsParent = listOf(
+                Mood("Feliz", R.drawable.ic_p_feliz),
+                Mood("Enojado", R.drawable.ic_p_enojado),
+                Mood("Cansado", R.drawable.ic_p_cansado),
+                Mood("Preocupado", R.drawable.ic_p_preocupado),
+                Mood("Nervioso", R.drawable.ic_p_nervioso),
+                Mood("Triste", R.drawable.ic_p_triste)
+            )
+            MoodSelection(
+                selectedMood = selectedMoodParent,
+                onMoodSelected = { mood ->
+                    selectedMoodParent = mood
+                },
+                moods = moodsParent
+            )
+
         }
 
+        // Botón en la parte inferior con espacio disponible
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Button(
+                onClick = {
+                    // De momento solo regresa al activity anterior
+                    (context as? Activity)?.finish()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFC472C6),
+                    contentColor = Color.White
+                )
+            ) {
+                Text("Agregar")
+            }
+        }
     }
 }
 
@@ -237,7 +303,33 @@ fun AddSymptomsBox() {
 
             // LazyColumn para mostrar la lista de síntomas guardados
             LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .drawWithContent {
+                        // Dibuja el contenido de la LazyColumn
+                        drawContent()
+
+                        // Dibuja la sombra superior
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(Color.Black.copy(alpha = 0.1f), Color.Transparent),
+                                startY = 0f,
+                                endY = 20f
+                            ),
+                            size = size
+                        )
+
+                        // Dibuja la sombra inferior
+                        drawRect(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.Black.copy(alpha = 0.1f)),
+                                startY = size.height - 20f,
+                                endY = size.height
+                            ),
+                            size = size
+                        )
+                    },
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(symptomsList) { symptom ->
